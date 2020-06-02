@@ -1,4 +1,4 @@
-@(sunInfo: model.SunInfo, temperature: Double, stockmarketInfo: model.StockMarketInfo, requests: Int)
+@(userProfileInfo: model.UserProfileInfo, weatherInfo: model.WeatherInfo, requests: Int)
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7,19 +7,21 @@
            href="@routes.Application.versioned("images/favicon.png")">
     </head>
     <body>
-        <h1>Hello Play</h1>
-        <div>Stock: @stockmarketInfo.name</div>
-        <div>Symbol: @stockmarketInfo.symbol</div>
-        <div>Currency: @stockmarketInfo.currency</div>
-        <div>Price: @stockmarketInfo.price</div>
-        <div>Yesterday Price: @stockmarketInfo.close_yesterday</div>
-        <div>Volume: @stockmarketInfo.volume</div>
-        <div>Last Trade: @stockmarketInfo.last_trade_time</div>
-        <div>Timezone: @stockmarketInfo.timezone</div>
+        <h2>User Profile</h2>
+        <div>Name: @userProfileInfo.fullname</div>
+        <div>User: @userProfileInfo.username</div>
+        <div>Email: @userProfileInfo.email</div>
+        <div>Age: @userProfileInfo.age</div>
+        <div>Phone: @userProfileInfo.phone</div>
         <br>
-        <div>Sunrise time: @sunInfo.sunrise</div>
-        <div>Sunset time: @sunInfo.sunset</div>
-        <div>Current temperature: @temperature</div>
+        <h2>Weather Info</h2>
+        <div>Date: @weatherInfo.datetime</div>
+        <div>Summary: @weatherInfo.summary</div>
+        <div>Temperature: @{weatherInfo.temperature}\u00B0C</div>
+        <div>Humidity: @{weatherInfo.humidity}%</div>
+        <div>Pressure: @{weatherInfo.pressure} hPa</div>
+        <div>Location: @weatherInfo.location</div>
+        <br>
         <div>Requests: @requests</div>
     </body>
 </html>

@@ -12,7 +12,7 @@ import actors.StatsActor
 import actors.StatsActor.Ping
 import akka.actor.Props
 import play.filters.HttpFiltersComponents
-import services.{SunService, WeatherService, StockMarketService}
+import services.{UserProfileService, WeatherService}
 
 import scala.concurrent.Future
 
@@ -35,9 +35,8 @@ class AppComponents(context: Context) extends
   lazy val router: Router = wire[Routes]
   lazy val applicationController = wire[Application]
 
-  lazy val sunService = wire[SunService]
+  lazy val userProfileService = wire[UserProfileService]
   lazy val weatherService = wire[WeatherService]
-  lazy val stockMarketService = wire[StockMarketService]
 
   lazy val statsFilter: Filter = wire[StatsFilter]
   override lazy val httpFilters = Seq(statsFilter)

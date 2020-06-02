@@ -10,7 +10,7 @@ import controllers.Assets.Asset
 import javax.inject._
 import play.api.mvc._
 import play.api.libs.ws.WSClient
-import services.{StockMarketService, SunService, WeatherService}
+import services.{WeatherService, UserProfileService}
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -18,30 +18,25 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 
 class Application (components: ControllerComponents, assets: Assets,
-                   sunService: SunService,
+                   userProfileService: UserProfileService,
                    weatherService: WeatherService,
-                   stockMarketService: StockMarketService,
                    actorSystem: ActorSystem) extends AbstractController(components) {
 
   def index = Action.async {
     val lat = -33.8830
     val lon = 151.2167
-    val symbol = "DJI"
-
-    val sunInfoFuture = sunService.getSunInfo(lat, lon)
-    val tempFuture = weatherService.getTemperature(lat, lon)
-    val stockmarketFuture = stockMarketService.getStockMarketInfo(symbol)
 
     implicit val timeout = Timeout(5, TimeUnit.SECONDS)
     val requestsFuture = (actorSystem.actorSelection(StatsActor.path) ? StatsActor.GetsStats).mapTo[Int]
+    val userInfoFuture = userProfileService.getUserProfileInfo()
+    val weatherInfoFuture = weatherService.getWeatherInfo(lat, lon)
 
     for {
-      sunInfo <- sunInfoFuture
-      temperature <- tempFuture
-      stockmarketInfo <- stockmarketFuture
+      userInfo <- userInfoFuture
+      weatherInfo <- weatherInfoFuture
       requests <- requestsFuture
     } yield {
-      Ok(views.html.index(sunInfo, temperature, stockmarketInfo, requests))
+      Ok(views.html.index(userInfo, weatherInfo, requests))
     }
   }
 
